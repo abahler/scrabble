@@ -1,0 +1,25 @@
+/*
+ *
+ * 	Pseudocode for an online version of Scrabble
+ *
+ */
+
+1. player A plays a word, hits 'submit'
+
+2. program grabs the letters and determines the word
+	- words are either vertical (something like ['A2', 'B2', 'C2', 'D2']) or horizontal (something like ['A2', 'A3', 'A4', 'A5'])
+	- so the program gets
+
+3. player B opts to accept the word, or challenge
+
+4. if opt == accept:
+		- control goes to player B, program goes back to step 1
+	else:	
+		- Player B challenges the word
+		-  program sends word to API, evaluates result `isWord`.
+		// Remember to accommodate possibility that 'true' and 'false' will be strings
+		- if isWord == true:
+				player B loses a turn. 
+		   else:
+				player A loses a turn. it is now player B's turn.
+
