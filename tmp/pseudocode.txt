@@ -5,6 +5,7 @@
  *  BACKGROUND:
  *  The board is made of 225 tiles (15 both horizontally and vertically).  
  *  There can only be 2 players (at least initially). 
+ *  After a turn, the player gets new letters from "the bag" to replenish their current rack to seven letters.
  *
  *  FUTURE ITERATIONS:
  *  After the basic game is built, future releases will feature the familiar double-word, triple-word,
@@ -15,28 +16,38 @@
 
 1. Player A, having seven letters, plays a word.
 	- If this is the first play of the game:
-		>> Player A must include the middle tile (G7).
+		>> Player A must include the middle tile (G7) in the word.
 	  Else:
 	  	>> Player A must play off of at least one letter that has already been played.
+
+	  Either way, 'Submit' button stays disabled until the proper condition is met. 
+	  If the condition is made false by removing a tile, the button becomes disabled once again.
 
 2. Player A hits 'Submit' to submit the play.
 
 3. Script grabs the letters and determines the word
 	- words are either vertical (taking up cells like 'A2', 'B2', 'C2', 'D2') or horizontal (taking up cells like 'A2', 'A3', 'A4', 'A5')
 	- the program gets all recently added letters ("recently added" meaning in the current player's turn) and sorts them by cell number, then joins them together to form a word.
-	So as an example, ['r', 'o', 's', 'e'] becomes 'rose'
+	So as an example, ['r', 'o', 's', 'e'] becomes 'rose'.
+
+	* The user can only play a single word, and words are played one way only, but can intersect with other words, which gives the player the points for all those words.
+	  In that case, all words in the play should be evaluated (usually only two in my experience).
 
 4. Player B opts to accept the word, or challenge its status as a legitimate common word per the rules of Scrabble.
 
-5. if Player B accepts the word:
+5. If Player B accepts the word:
 		- Player A's score increases with the point value for each letter in the played word.
+		- Player A gets _n_ random letters from the bag, 
+			_n_ being the number of letters to get them back to seven.
 		- Control goes to player B, program goes back to step 1
-	else:	
+    Else:	
 		- Player B challenges the word
-		-  program sends word to API, evaluates result `isWord`.
-		// Remember to accommodate possibility that 'true' and 'false' will be strings
-		- if isWord == true:
-				player B loses a turn. 
-		   else:
-				player A loses a turn. it is now player B's turn.
+		- Script sends word to English dictionary API, evaluates result.
+		- If the played word is a word:
+				Player B loses a turn. 
+		   Else:
+				Player A loses a turn. it is now player B's turn.
+
+
+
 
