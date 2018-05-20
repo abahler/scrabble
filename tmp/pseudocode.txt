@@ -1,19 +1,36 @@
 /*
  *
  * 	Pseudocode for an online version of Scrabble
+ * 
+ *  BACKGROUND:
+ *  The board is made of 225 tiles (15 both horizontally and vertically).  
+ *  There can only be 2 players (at least initially). 
  *
+ *  FUTURE ITERATIONS:
+ *  After the basic game is built, future releases will feature the familiar double-word, triple-word,
+ *    double-letter and triple-letter score cells that compound the points for one turn.
+ * 	
+ * 	Further out, it would be great to create a computerized player for one-player games.
  */
 
-1. player A plays a word, hits 'submit'
+1. Player A, having seven letters, plays a word.
+	- If this is the first play of the game:
+		>> Player A must include the middle tile (G7).
+	  Else:
+	  	>> Player A must play off of at least one letter that has already been played.
 
-2. program grabs the letters and determines the word
-	- words are either vertical (something like ['A2', 'B2', 'C2', 'D2']) or horizontal (something like ['A2', 'A3', 'A4', 'A5'])
-	- so the program gets
+2. Player A hits 'Submit' to submit the play.
 
-3. player B opts to accept the word, or challenge
+3. Script grabs the letters and determines the word
+	- words are either vertical (taking up cells like 'A2', 'B2', 'C2', 'D2') or horizontal (taking up cells like 'A2', 'A3', 'A4', 'A5')
+	- the program gets all recently added letters ("recently added" meaning in the current player's turn) and sorts them by cell number, then joins them together to form a word.
+	So as an example, ['r', 'o', 's', 'e'] becomes 'rose'
 
-4. if opt == accept:
-		- control goes to player B, program goes back to step 1
+4. Player B opts to accept the word, or challenge its status as a legitimate common word per the rules of Scrabble.
+
+5. if Player B accepts the word:
+		- Player A's score increases with the point value for each letter in the played word.
+		- Control goes to player B, program goes back to step 1
 	else:	
 		- Player B challenges the word
 		-  program sends word to API, evaluates result `isWord`.
