@@ -30,7 +30,7 @@
 	- the program gets all recently added letters ("recently added" meaning in the current player's turn) and sorts them by cell number, then joins them together to form a word.
 	So as an example, ['r', 'o', 's', 'e'] becomes 'rose'.
 
-	* The user can only play a single word, and words are played one way only, but can intersect with other words, which gives the player the points for all those words.
+	* A player can only play a single word, and words are played one way only, but can intersect with other words, which gives the player the points for all those words.
 	  In that case, all words in the play should be evaluated (usually only two in my experience).
 
 4. Player B opts to accept the word, or challenge its status as a legitimate common word per the rules of Scrabble.
@@ -47,6 +47,16 @@
 				Player B loses a turn. 
 		   Else:
 				Player A loses a turn. it is now player B's turn.
+
+5a. A player can click an 'Exchange' button that lets them exchange up to seven letters, 
+	losing a turn in the process. 
+	If there are less than seven letters in the bag, the exchange will be limited to that number of letters. 
+	If no letters are left in the bag, the button will be disabled.
+
+5b. A player can click a 'Done' button when they are down to their last letters and cannot make a play.
+	Once the other player also clicks the 'Done' button, the total point value of the remaining letters in each player's rack will be deducted from their respective scores, and the final score will be shown. 
+	The game ends.
+
 
 
 
