@@ -1,11 +1,12 @@
 /*
 React components:
-- Board
-- Cell
-- Tile
-- Scoreboard
-- Rack
-- anything else?
+- Tile (a square containing a letter on the user's rack)
+- Rack (a Rack holds Tiles)
+- Cell (a Cell is either open or contains a Tile)
+- Board (a Board is comprised of all the Cells on which Tiles can be played)
+- ScoreBox (calling it ScoreBox instead of ScoreBoard so it's not confused with Board)
+- ButtonBox (contains all the user action buttons - submitting a word, exchanging tiles, etc.)
+- anything else? (For now, buttons can be boring old HTML. nothing fancy)
 */
 
 /*
@@ -13,6 +14,48 @@ React components:
  * PROCEDURAL CODE (vanilla JS)
  *
  */
+
+const maxTiles = 7;
+// Track how many players have marked their game as finished
+// When this equals 2 (indicating both players are done), the game is done and special message displays
+// Cannot be a constant because we will increase it
+let finishedPlayers = 0;
+
+const getRandomInt = (max) => {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+
+// TODO: write function to give control to other player. 
+// Should the ID of the current player as a param?
+const giveControl = () => {};
+
+// `n` is the number of tiles being exchanged
+// This function only gets new tiles; it is up to the calling code to put the tiles in the rack
+const getNewTiles = (n) => {
+	// Cannot exchange more than the max number of tiles that can be on the board
+	if (n > maxTiles) { 
+		throw new RangeError(`Player cannot exchange more than the max number of tiles (${maxTiles})`); 
+	}
+
+	let numAvailableTiles = bag.length;
+	let tiles = [];
+
+	let i = 0;
+	while (i < n) {
+		// get random tile from `bag`
+		let index = getRandomInt(numAvailableTiles);
+		// Zero-base it
+		index -= 1;
+
+		// Remove tile from bag, and add it to array of new tiles
+		let newTile = bag.splice(index, 1);
+		tiles.push(newTile);
+
+		i++;
+	}
+
+	return tiles;
+};
 
 // Letter-to-points mapping
 const valuesAndFrequency = {
@@ -58,9 +101,11 @@ for (letter in valuesAndFrequency) {
   }
 }
 
-// Track how many players have marked their game as finished (cannot use any more letters)
-// When this equals 2 (indicating both players are done), the game is done, and a special message can display
-let finishedPlayers = 0;
+// Get reference to buttons
+let exchangeBtn = document.getElementById('exchange');
+let skipTurnBtn = document.getElementById('skipTurn');
+let submitBtn = document.getElementById('submit');
+let done = document.getElementById('finishGame');
 
 /**
  * Set up event handlers
@@ -68,24 +113,33 @@ let finishedPlayers = 0;
 
 exchangeBtn.onclick = (e) => {
 	// Player forgoes turn
+
+	// TODO: get number letters player is exchanging
+	let tiles;
+
+	let newTiles = getNewTiles(tile.length);
+
+	// TODO: populate player's rack with new tiles
+
+	giveControl();
 };
 
 skipTurnBtn.onclick = (e) => {
 	// Don't force player to exchange letters. 
 	// Just relieve control from player, give control to opponent
+	giveControl();
 }; 
 
 submitBtn.onclick = (e) => {
 
-	let tiles = [];
-
+	let playedTiles = [];
 	// TODO:  Grab all newly played tiles from all cells, add to `tiles` array
 
-	tiles.sort( (a,b) => {
+	playedTiles.sort( (a,b) => {
 		return a.slice(1, 3) - b.slice(1, 3);
 	});
 
-	let word = tiles.join('');
+	let word = playedTiles.join('');
 
 	// TODO:
 	// Make ajax call to dictionary API to validate it's a true word
@@ -95,7 +149,7 @@ submitBtn.onclick = (e) => {
 	let wordScore = 0;
 
 	// Calculate point value
-	tiles.forEach( (v,i) => {
+	playedTiles.forEach( (v,i) => {
 		// TODO get class string of cell
 
 		// Set word multiplier if there is one, for later compounding
@@ -124,7 +178,14 @@ submitBtn.onclick = (e) => {
 
 	playerScore += wordScore;	
 
+	// Replenish tiles in rack
+	let newTiles = getNewTiles(playedTiles.length);
+
+	// TODO: get reference to rack, and add each new tile to it
+	// Probably a Rack component that holds other Tile components
+
 	// TODO: update player score with `playerScore`, broadcasting this to player and opponent
+	giveControl();
 
 };
 
@@ -145,6 +206,8 @@ doneBtn.onclick = (e) => {
 
 	if (finishedPlayers === 2) {
 		// TODO: show special 'game is finished' graphic and/or message
+	} else {
+		giveControl();
 	}
 
 };
