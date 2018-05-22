@@ -59,7 +59,7 @@ for (letter in valuesAndFrequency) {
 }
 
 // Track how many players have marked their game as finished (cannot use any more letters)
-// When this is 2, the game is done, and a special message can display
+// When this equals 2 (indicating both players are done), the game is done, and a special message can display
 let finishedPlayers = 0;
 
 /**
