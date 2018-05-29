@@ -26,7 +26,7 @@ const getRandomInt = (max) => {
 }
 
 // TODO: write function to give control to other player. 
-// Should the ID of the current player as a param?
+// Should it take the ID of the current player as a param?
 const giveControl = () => {};
 
 // `n` is the number of tiles being exchanged
@@ -42,7 +42,7 @@ const getNewTiles = (n) => {
 
 	let i = 0;
 	while (i < n) {
-		// get random tile from `bag`
+		// Get random tile from `bag`
 		let index = getRandomInt(numAvailableTiles);
 		// Zero-base it
 		index -= 1;
@@ -114,12 +114,12 @@ let done = document.getElementById('finishGame');
 exchangeBtn.onclick = (e) => {
 	// Player forgoes turn
 
-	// TODO: get number letters player is exchanging
+	// TODO: get the number of letters player is exchanging
 	let tiles;
 
 	let newTiles = getNewTiles(tile.length);
 
-	// TODO: populate player's rack with new tiles
+	// TODO: populate player's rack with new tiles, so the client code doesn't always have to do it
 
 	giveControl();
 };
@@ -133,26 +133,28 @@ skipTurnBtn.onclick = (e) => {
 submitBtn.onclick = (e) => {
 
 	let playedTiles = [];
-	// TODO:  Grab all newly played tiles from all cells, add to `tiles` array
+	// TODO: Grab all newly played tiles from all cells, add to `playedTiles` array
 
+	// Sort by cell number (A8, A9, A10, A11, A12)
 	playedTiles.sort( (a,b) => {
 		return a.slice(1, 3) - b.slice(1, 3);
 	});
 
-	let word = playedTiles.join('');
+	// TODO: get values of each tile,
+	// playedTiles.join('') won't work because that will just be a string of the cell numbers
 
 	// TODO:
-	// Make ajax call to dictionary API to validate it's a true word
-	// API returns true, then...
+	// Send word to opponent for them to either accept or challenge
 
 	let wordMultiplier = '';
 	let wordScore = 0;
 
 	// Calculate point value
 	playedTiles.forEach( (v,i) => {
-		// TODO get class string of cell
+		// TODO get value of 'class' attribute of the <td>
 
-		// Set word multiplier if there is one, for later compounding
+		// Set word multiplier if there is one, for later compounding (after this loop)
+		// Won't be overwritten because you can't get a double-word and a triple-word score in one play
 		if (classStr.indexOf('triple-word') !== -1) {
 			wordMultiplier = 'triple-word';
 		} else if (classStr.indexOf('double-word') !== -1) {
