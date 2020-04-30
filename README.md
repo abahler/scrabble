@@ -1,2 +1,2 @@
 # wiffy
-A mimic of word games like Scrabble and Words With Friends.
+A mimic of popular online and real-life word games.
